@@ -1,0 +1,16 @@
+{
+    "name": "SmartyPals - My After School Lessons",
+    "origin": "*",
+    "short_name": "SmartyPals",
+    "description": "SmartyPals is smart",
+    "icons": [
+        {
+            "src": "/images/smarty_pal.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "start_url": "index.html",
+    "display": "fullscreen",
+    "background_color": "#B12A34"
+}
