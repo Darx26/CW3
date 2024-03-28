@@ -26,6 +26,7 @@
 <script>
 import lessonsList from './components/Lessons.vue'
 import checkoutPage from './components/Checkout.vue'
+
 export default {
   components: {
     lessonsList, checkoutPage
@@ -36,6 +37,9 @@ export default {
       showLesson: true,
       cart: [],
       lessons: [],
+      sortType: '',
+      sortOrder: 'ascending', //to default sorting order to ascending
+      searchQuery: '',
     }
   },
   methods: {

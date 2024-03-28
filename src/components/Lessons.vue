@@ -38,7 +38,7 @@
         <!-- LESSONS CONTAINER -->
         <div class="all-lessons-container">
             <!-- v-for used to display lessons from sortedLessons array -->
-            <div class="lesson-box" v-for="lesson in lessons" :key="lesson.id">
+            <div class="lesson-box" v-for="lesson in sortedLessons" :key="lesson.id">
                 <figure>
                     <!--bind 'src' attr to 'lesson.image' in 'data'-->
                     <img v-bind:src="lesson.image" style="height: 200px; width: 200px;">
@@ -64,8 +64,8 @@
                         {{ lesson.availableInventory }} left!</span>
                     <span v-else>Buy now!</span> <br>
                     <!-- Rating styles -->
-                    <!-- <span v-for="n in lesson.rating" key="">★</span>
-                    <span v-for="n in 5 - lesson.rating">☆</span> -->
+                    <span v-for="n in lesson.rating" :key="n">★</span>
+                    <span v-for="n in 5 - lesson.rating" :key="n">☆</span>
                 </p>
             </div>
         </div>
@@ -73,11 +73,119 @@
 </template>
 
 <script>
+// compare Subject in Ascending Order
+function compareSubjectAscending(a, b) {
+  let sub1 = a.subject.toLowerCase();
+  let sub2 = b.subject.toLowerCase();
+  if (sub1 > sub2) {
+    return 1;
+  } else if (sub1 < sub2) {
+    return -1;
+  } else {
+    return 0;
+  }
+}
+// compare Subject in Descending Order
+function compareSubjectDescending(a, b) {
+  let sub1 = a.subject.toLowerCase();
+  let sub2 = b.subject.toLowerCase();
+  if (sub1 < sub2) {
+    return 1;
+  } else if (sub1 > sub2) {
+    return -1;
+  } else {
+    return 0;
+  }
+}
+// compare Location in Ascending Order
+function compareLocationAscending(a, b) {
+  let loc1 = a.location.toLowerCase();
+  let loc2 = b.location.toLowerCase();
+  if (loc1 > loc2) {
+    return 1;
+  } else if (loc1 < loc2) {
+    return -1;
+  } else {
+    return 0;
+  }
+}
+// compare Location in Descending Order
+function compareLocationDescending(a, b) {
+  let loc1 = a.location.toLowerCase();
+  let loc2 = b.location.toLowerCase();
+  if (loc1 < loc2) {
+    return 1;
+  } else if (loc1 > loc2) {
+    return -1;
+  } else {
+    return 0;
+  }
+}
+// compare Price in Ascending Order
+function comparePriceAscending(a, b) {
+  if (a.price > b.price) {
+    return 1;
+  } else if (a.price < b.price) {
+    return -1;
+  } else {
+    return 0;
+  }
+}
+// compare Price in Descending Order
+function comparePriceDescending(a, b) {
+  if (a.price < b.price) {
+    return 1;
+  } else if (a.price > b.price) {
+    return -1;
+  } else {
+    return 0;
+  }
+}
+// compare Rating in Ascending Order
+function compareRatingAscending(a, b) {
+  if (a.rating > b.rating) {
+    return 1;
+  } else if (a.rating < b.rating) {
+    return -1;
+  } else {
+    return 0;
+  }
+}
+// compare Rating in Descending Order
+function compareRatingDescending(a, b) {
+  if (a.rating < b.rating) {
+    return 1;
+  } else if (a.rating > b.rating) {
+    return -1;
+  } else {
+    return 0;
+  }
+}
+// compare Avaiable Inventory in Ascending Order
+function compareAvailableInventoryAscending(a, b) {
+  if (a.availableInventory > b.availableInventory) {
+    return 1;
+  } else if (a.availableInventory < b.availableInventory) {
+    return -1;
+  } else {
+    return 0;
+  }
+}
+// compare Available Inventory in Descending Order
+function compareAvailableInventoryDescending(a, b) {
+  if (a.availableInventory < b.availableInventory) {
+    return 1;
+  } else if (a.availableInventory > b.availableInventory) {
+    return -1;
+  } else {
+    return 0;
+  }
+}
 export default {
     name: "Lessons-List",
     props: ["lessons"],
-    data(){
-        return{
+    data() {
+        return {
             searchQuery: '',
             sortType: '',
             sortOrder: 'ascending', //to default sorting order to ascending
@@ -90,7 +198,60 @@ export default {
         },
     },
     computed: {
+        //Sorting method
+        sortedLessons() {
+            let lessonsArray = this.lessons.slice(0);
+            let query = this.searchQuery.toLowerCase();
 
+            lessonsArray = lessonsArray.filter(lesson =>
+                lesson.subject.toLowerCase().includes(query) || lesson.location.toLowerCase().includes(query)
+            );
+
+            // Filter and sort based on sortType and sortOrder
+
+            //Sort Subject
+            if (this.sortType === "subject") {
+                if (this.sortOrder === "ascending") {
+                    return lessonsArray.sort(compareSubjectAscending);
+                } else {
+                    return lessonsArray.sort(compareSubjectDescending);
+                }
+            }
+            //Sort Location
+            if (this.sortType === "location") {
+                if (this.sortOrder === "ascending") {
+                    return lessonsArray.sort(compareLocationAscending);
+                } else {
+                    return lessonsArray.sort(compareLocationDescending);
+                }
+            }
+            //Sort Price
+            if (this.sortType === "price") {
+                if (this.sortOrder === "ascending") {
+                    return lessonsArray.sort(comparePriceAscending);
+                } else {
+                    return lessonsArray.sort(comparePriceDescending);
+                }
+            }
+            //Sort Rating
+            if (this.sortType === "rating") {
+                if (this.sortOrder === "ascending") {
+                    return lessonsArray.sort(compareRatingAscending);
+                } else {
+                    return lessonsArray.sort(compareRatingDescending);
+                }
+            }
+            //Sort Inventory
+            if (this.sortType === "availableInventory") {
+                if (this.sortOrder === "ascending") {
+                    return lessonsArray.sort(compareAvailableInventoryAscending);
+                } else {
+                    return lessonsArray.sort(compareAvailableInventoryDescending);
+                }
+            }
+
+            return lessonsArray;
+        }
     }
 }
 </script>
